@@ -64,48 +64,32 @@ public class Localizacion {
 	
 	void printLocalizacion() {    
 	    for(int i = 0; i < this.lista.size(); i++) {
-	        System.out.printf("%d;%s;", i, lista.get(i).getDocumento());
-	        FechaHora fecha = lista.get(i).getFechaPosicion();        
-	        System.out.printf("%02d/%02d/%04d;%02d:%02d;", 
-	        		fecha.getFecha().getDia(), 
-	        		fecha.getFecha().getMes(), 
-	        		fecha.getFecha().getAnio(),
-	        		fecha.getHora().getHora(),
-	        		fecha.getHora().getMinuto());
-	        System.out.printf("%.4f;%.4f\n", lista.get(i).getCoordenada().getLatitud(), 
-	        		lista.get(i).getCoordenada().getLongitud());
+	        System.out.print(this.toString());
 	    }
 	}
 
 	@Override
 	public String toString() {
-		String cadena = "";
-		for(int i = 0; i < this.lista.size(); i++) {
-			PosicionPersona pp = lista.get(i);
-	        cadena += String.format("%s;", pp.getDocumento());
-	        FechaHora fecha = pp.getFechaPosicion();        
-	        cadena+=String.format("%02d/%02d/%04d;%02d:%02d;", 
-	        		fecha.getFecha().getDia(), 
-	        		fecha.getFecha().getMes(), 
-	        		fecha.getFecha().getAnio(),
-	        		fecha.getHora().getHora(),
-	        		fecha.getHora().getMinuto());
-	        cadena+=String.format("%.4f;%.4f\n", pp.getCoordenada().getLatitud(), 
-	        		pp.getCoordenada().getLongitud());
+		StringBuilder cadena = new StringBuilder();;
+		for(PosicionPersona pp : lista) {
+			cadena.append(formatearFechaPosicion(pp));
 	    }
 		
-		return cadena;		
+		return cadena.toString();		
 	}
-	
+
+	private String formatearFechaPosicion(PosicionPersona pp) {
+		FechaHora f = pp.getFechaPosicion();
+		return String.format("%s;%02d/%02d/%04d;%02d:%02d;%.4f;%.4f\n",
+				pp.getDocumento(),
+				f.getFecha().getDia(), f.getFecha().getMes(), f.getFecha().getAnio(),
+				f.getHora().getHora(), f.getHora().getMinuto(),
+				pp.getCoordenada().getLatitud(), pp.getCoordenada().getLongitud());
+	}
+
 	@SuppressWarnings("unused")
 	private FechaHora parsearFecha (String fecha) {
-		int dia, mes, anio;
-		String[] valores = fecha.split("\\/");
-		dia = Integer.parseInt(valores[0]);
-		mes = Integer.parseInt(valores[1]);
-		anio = Integer.parseInt(valores[2]);
-		FechaHora fechaHora = new FechaHora(dia, mes, anio, 0, 0);
-		return fechaHora;
+		return parsearFecha(fecha, "00:00");
 	}
 	
 	private  FechaHora parsearFecha (String fecha, String hora) {
