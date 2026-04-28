@@ -63,9 +63,7 @@ public class Localizacion {
 	}
 	
 	void printLocalizacion() {    
-	    for(int i = 0; i < this.lista.size(); i++) {
-	        System.out.print(this.toString());
-	    }
+	    System.out.print(this.toString());
 	}
 
 	@Override
